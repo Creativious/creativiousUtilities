@@ -3,6 +3,7 @@ import logging
 import psycopg2
 import psycopg2.extensions
 from creativiousUtilities.logging import Logger
+import mysql.connector
 
 @DeprecationWarning
 class PostsqeSQLController:
@@ -58,6 +59,18 @@ class PostsqeSQLController:
     class Table:
         def __init__(self, name):
             self.name = name
+
+
+
+class MySQL:
+    def __init__(self):
+        self.connection = {
+            "object": None
+        }
+        pass
+    def connect(self, host: str, user: str, password: str, database: str):
+        mysql.connector.connect(host=host, user=user, password=password, database=database)
+
 
 
 

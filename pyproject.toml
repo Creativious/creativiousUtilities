@@ -12,12 +12,12 @@ exclude = [
 
 [project]
 name = "creativiousUtilities"
-version = "2.0.0.dev13"
+version = "2.1.0.dev1"
 authors = [{name="Creativious", email="timothy@creativious.net"}]
 description = "Experimental and likely to break by update\nIf you are to use this have it require the specific version you know works\nGeneral purpose prebuilt functions for any project that I work on"
 readme = "README.md"
 requires-python = ">=3.10"
-dependancies = ['py-cord>=2.0.0rc1']
+dependancies = ['py-cord>=2.0.0', 'mysql-connector-python>=8.0.29', 'psycopg2', 'pyyaml']
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent"

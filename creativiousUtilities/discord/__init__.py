@@ -24,41 +24,25 @@ class HelpCommand:
         self.client = client
         self.cogs = [str(cog) for cog in client.cogs]
         self.base_commands = [str(command.name) for command in list(client.commands)]
-        self.base_slash_commands_list = [str(command.name) for command in list(client.application_commands)]
-        print(self.base_slash_commands_list)
         self.prefix = str(self.client.command_prefix)
         self.base_commands_list = self.__generateBaseCommandsList()
-        self.slash_commands_list = self.__generateBaseSlashCommandsList()
         self.pages = self.__generatePages()
 
     def __generateBaseCommandsList(self):
         base_commands_list = []
         for command in self.base_commands:
-            commandDetail = f"***{str(self.prefix)}{str(command)}*** - *{str(self.client.get_application_command(command))}*"
+            commandDetail = f"***{str(self.prefix)}{str(command)}*** - *{str(self.client.command(command))}*"
             base_commands_list.append(commandDetail)
         return base_commands_list
-
-    def __generateBaseSlashCommandsList(self):
-        slash_commands_list = []
-        for command in self.base_slash_commands_list:
-            commandDetail = f"***/{str(command)}*** - *{str(self.client.get_application_command(command).parent.help)}"
-            slash_commands_list.append(commandDetail)
-        return slash_commands_list
 
     def __generatePages(self):
         cogsExist = len(self.cogs) > 0
         pages = []
-        if cogsExist:
-            embed = None
-        else:
-            string = "\n"
-            for command in self.base_commands_list:
-                string += command + "\n"
-            string2 = "\n"
-            for command in self.base_slash_commands_list:
-                string2 += command + "\n"
-            embed = discord.Embed(title=f"{self.client.user.name} Commands", description=f"""**NORMAL COMMANDS**
-            """ + string + "\n**SLASH COMMANDS**" + string2, color=discord.Color.random())
+        string = "\n"
+        for command in self.base_commands_list:
+            string += command + "\n"
+        embed = discord.Embed(title=f"{self.client.user.name} Commands", description=f"""**COMMANDS**
+        """, color=discord.Color.random())
         pages.append(embed)
         return pages
 
