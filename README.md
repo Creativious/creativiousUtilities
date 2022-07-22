@@ -72,11 +72,28 @@ client.run("TOKEN")
 * A few bug fixes
 
 -----
+<h2 align="center">Logging</h2>
+
+default_config.yaml
+```yaml
+test messages:
+  message 1: Hello World # This message will be printed
+```
+yamltest.py
+```python
+from creativiousUtilities.config import YAMLConfig
+
+config = YAMLConfig("config/default_config.yaml", "config/config.yaml").load()
+
+print("Message 1: " + config['test messages']["message 1"])
+```
+
+
+-----
 
 ### Todo
 
+- [ ] Updated SQL Module for MySQL
 - [ ] Add SQL Module to README.md
-- [ ] Create Config Module
-- [ ] Add Config Module to README.md
 - [ ] Create GMOD Module
 - [ ] Add GMOD Module to README.md
