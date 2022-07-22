@@ -3,6 +3,8 @@
 - HIGHLY LIKELY TO BREAK FOR EACH VERSION, BACKUP BEFORE UPDATING, AND REQUIRE SPECIFIC VERSION IF YOU ARE TO USE THIS
 ```
 
+<h3 align="center">Not designed for use for anyone other then myself, so bare with caution</h3>
+
 -----
 
 <h1 align="center">Modules</h1>
