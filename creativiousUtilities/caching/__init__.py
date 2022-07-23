@@ -143,5 +143,5 @@ class CacheSystem:
         self.caches.pop(str(name))
 
     def __del__(self):
-        for key in self.caches:
-            self.deleteCache(key)
+        for cache in self.caches:
+            cache.saveCache()
