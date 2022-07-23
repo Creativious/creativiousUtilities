@@ -1,8 +1,3 @@
-import logging
-
-import psycopg2
-import psycopg2.extensions
-from creativiousUtilities.logging import Logger
 import mysql.connector
 from mysql.connector import errorcode
 import uuid

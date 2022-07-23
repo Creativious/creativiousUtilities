@@ -1,0 +1,5 @@
+setuptools~=60.2.0
+mysql-connector-python~=8.0.29
+PyYAML~=6.0
+colorlog~=6.6.0
+MIDIUtil~=1.2.1
