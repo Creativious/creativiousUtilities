@@ -96,8 +96,11 @@ class CacheSystem:
                     data = json.loads(f.read())
                 self.createCache(file[:-5], data["cache_type"])
     def createCache(self, name: str, cacheType):
-        self.caches[str(name)] = Cache(os.path.join(self.cacheFolder, name + ".json"), cacheType=cacheType, delay=self.delay)
-        return self.caches[str(name)]
+        if name in self.caches:
+            return self.caches[str(name)]
+        else:
+            self.caches[str(name)] = Cache(os.path.join(self.cacheFolder, name + ".json"), cacheType=cacheType, delay=self.delay)
+            return self.caches[str(name)]
     def updateCache(self, name: str, cache: Cache):
         self.caches[str(name)] = cache
     def getCache(self, name: str):
