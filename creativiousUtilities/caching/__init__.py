@@ -4,8 +4,9 @@ import json
 
 
 class CacheType:
-    Additive = "Additive" # Each bit of information has its own delay for when it's wiped
-    OneTime = "One Time" # All information gets cleanly wiped every time the delay passes
+    Additive = "Additive"  # Each bit of information has its own delay for when it's wiped
+    OneTime = "One Time"  # All information gets cleanly wiped every time the delay passes
+
 
 class Cache:
     def __init__(self, filename: str, cacheType, delay: int):
@@ -17,8 +18,8 @@ class Cache:
             "cache_type": str(cacheType)
         }
         if cacheType == CacheType.Additive:
-            self.cache_dict["entries"] = {} # Contains the data
-            self.cache_dict["timed_entries"] = {} # Contains the time relative data
+            self.cache_dict["entries"] = {}  # Contains the data
+            self.cache_dict["timed_entries"] = {}  # Contains the time relative data
 
         elif cacheType == CacheType.OneTime:
             self.cache_dict["creation_time"] = self.createdAt
@@ -68,6 +69,11 @@ class Cache:
             raise "Not a valid CacheType"
         self.saveCache()
 
+    def delete_entry(self, name: str):
+        self.cache_dict["entries"].pop(name)
+        if self.type == CacheType.Additive:
+            self.cache_dict["timed_entries"].pop(name)
+
     def edit_entry(self, name: str, data):
         self.new_entry(name, data)
 
@@ -76,18 +82,22 @@ class Cache:
 
     def __del__(self):
         self.saveCache()
+
+
 class CacheSystem:
     """
     :parameter delay: int | The delay until the cache is destroyed or overwritten
     :parameter cacheFolder: str | Filepath of the folder where caches are to be stored
     """
+
     def __init__(self, delay: int, cacheFolder: str):
-        self.delay = delay # Delay until the cache is destroyed
+        self.delay = delay  # Delay until the cache is destroyed
         self.caches = {}
         if not os.path.exists(cacheFolder):
             raise "Folder doesn't exist [Caching]"
         self.cacheFolder = cacheFolder
         self.loadAllCaches()
+
     def loadAllCaches(self):
         files = os.listdir(self.cacheFolder)
         for file in files:
@@ -95,16 +105,21 @@ class CacheSystem:
                 with open(os.path.join(self.cacheFolder, file), 'r') as f:
                     data = json.loads(f.read())
                 self.createCache(file[:-5], data["cache_type"])
+
     def createCache(self, name: str, cacheType):
         if name in self.caches:
-            return self.caches[str(name)]
+            return self.getCache(name)
         else:
-            self.caches[str(name)] = Cache(os.path.join(self.cacheFolder, name + ".json"), cacheType=cacheType, delay=self.delay)
+            self.caches[str(name)] = Cache(os.path.join(self.cacheFolder, name + ".json"), cacheType=cacheType,
+                                           delay=self.delay)
             return self.caches[str(name)]
+
     def updateCache(self, name: str, cache: Cache):
         self.caches[str(name)] = cache
+
     def getCache(self, name: str):
         return self.caches[str(name)]
+
     def deleteCache(self, name: str):
         self.caches.pop(str(name))
 

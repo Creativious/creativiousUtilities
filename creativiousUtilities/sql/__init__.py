@@ -20,7 +20,8 @@ class MySQL:
                     raise "Database doesn't exist!"
                 else:
                     raise err
-            return self.connection
+            finally:
+                return self.connection
         else:
             return None
     def disconnect(self):
