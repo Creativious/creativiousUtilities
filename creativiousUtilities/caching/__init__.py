@@ -67,12 +67,16 @@ class Cache:
             self.cache_dict["timed_entries"][name] = round(time.time())
         else:
             raise "Not a valid CacheType"
-        self.saveCache()
 
     def delete_entry(self, name: str):
         self.cache_dict["entries"].pop(name)
         if self.type == CacheType.Additive:
             self.cache_dict["timed_entries"].pop(name)
+
+    def wipe_all_entries(self):
+        self.cache_dict["entries"] = {}
+        if self.type == CacheType.Additive:
+            self.cache_dict["timed_entries"] = {}
 
     def edit_entry(self, name: str, data):
         self.new_entry(name, data)
@@ -115,6 +119,7 @@ class CacheSystem:
             return self.caches[str(name)]
 
     def updateCache(self, name: str, cache: Cache):
+        cache.saveCache()
         self.caches[str(name)] = cache
 
     def getCache(self, name: str):
