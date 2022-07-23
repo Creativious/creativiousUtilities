@@ -59,6 +59,9 @@ class Cache:
             self.cache_dict = json.loads(f.read())
         return self.cache_dict
 
+    def get_data(self):
+        return self.cache_dict["entries"]
+
     def new_entry(self, name: str, data):
         if self.type == CacheType.OneTime:
             self.cache_dict["entries"][name] = data
