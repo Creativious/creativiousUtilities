@@ -78,6 +78,17 @@ class Cache:
         if self.type == CacheType.Additive:
             self.cache_dict["timed_entries"] = {}
 
+    def reset_created_time(self, entry: str = None):
+        if self.type == CacheType.OneTime:
+            self.cache_dict["created_at"] = round(time.time())
+        elif self.type == CacheType.Additive:
+            if entry is None:
+                raise "Provide an entry when using CacheType.Additive"
+            else:
+                self.cache_dict["timed_entries"][entry] = round(time.time())
+        else:
+            raise "Not a valid CacheType"
+
     def edit_entry(self, name: str, data):
         self.new_entry(name, data)
 
