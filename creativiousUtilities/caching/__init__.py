@@ -4,9 +4,8 @@ import json
 
 
 class CacheType:
-    Additive = "Additive"  # Each bit of information has its own delay for when it's wiped
-    OneTime = "One Time"  # All information gets cleanly wiped every time the delay passes
-
+    Additive = "Additive" # Each bit of information has its own delay for when it's wiped
+    OneTime = "One Time" # All information gets cleanly wiped every time the delay passes
 
 class Cache:
     def __init__(self, filename: str, cacheType, delay: int):
@@ -18,8 +17,8 @@ class Cache:
             "cache_type": str(cacheType)
         }
         if cacheType == CacheType.Additive:
-            self.cache_dict["entries"] = {}  # Contains the data
-            self.cache_dict["timed_entries"] = {}  # Contains the time relative data
+            self.cache_dict["entries"] = {} # Contains the data
+            self.cache_dict["timed_entries"] = {} # Contains the time relative data
 
         elif cacheType == CacheType.OneTime:
             self.cache_dict["creation_time"] = self.createdAt
@@ -30,6 +29,8 @@ class Cache:
             self.saveCache()
         else:
             self.loadCache()
+            if cacheType == CacheType.OneTime:
+                self.createdAt = self.cache_dict["creation_time"]
 
     def check_if_delay_passed(self, entry: str = None):
         """Returns true if the delay is passed
@@ -83,12 +84,14 @@ class Cache:
 
     def reset_created_time(self, entry: str = None):
         if self.type == CacheType.OneTime:
-            self.cache_dict["created_at"] = round(time.time())
+            newTime = round(time.time())
+            self.createdAt = newTime
+            self.cache_dict["created_at"] = newTime
         elif self.type == CacheType.Additive:
             if entry is None:
                 raise "Provide an entry when using CacheType.Additive"
             else:
-                self.cache_dict["timed_entries"][entry] = round(time.time())
+               self.cache_dict["timed_entries"][entry] = round(time.time())
         else:
             raise "Not a valid CacheType"
 
@@ -100,22 +103,19 @@ class Cache:
 
     def __del__(self):
         self.saveCache()
-
-
 class CacheSystem:
     """
     :parameter delay: int | The delay until the cache is destroyed or overwritten
     :parameter cacheFolder: str | Filepath of the folder where caches are to be stored
     """
-
     def __init__(self, delay: int, cacheFolder: str):
-        self.delay = delay  # Delay until the cache is destroyed
+        self.delay = delay # Delay until the cache is destroyed
         self.caches = {}
+        self.__cacheFirstTimes = {}
         if not os.path.exists(cacheFolder):
             raise "Folder doesn't exist [Caching]"
         self.cacheFolder = cacheFolder
         self.loadAllCaches()
-
     def loadAllCaches(self):
         files = os.listdir(self.cacheFolder)
         for file in files:
@@ -123,24 +123,25 @@ class CacheSystem:
                 with open(os.path.join(self.cacheFolder, file), 'r') as f:
                     data = json.loads(f.read())
                 self.createCache(file[:-5], data["cache_type"])
-
     def createCache(self, name: str, cacheType):
         if name in self.caches:
             return self.getCache(name)
         else:
-            self.caches[str(name)] = Cache(os.path.join(self.cacheFolder, name + ".json"), cacheType=cacheType,
-                                           delay=self.delay)
+            self.caches[str(name)] = Cache(os.path.join(self.cacheFolder, name + ".json"), cacheType=cacheType, delay=self.delay)
+            self.__cacheFirstTimes[str(name)] = False
             return self.caches[str(name)]
-
     def updateCache(self, name: str, cache: Cache):
         cache.saveCache()
         self.caches[str(name)] = cache
-
     def getCache(self, name: str):
         return self.caches[str(name)]
-
     def deleteCache(self, name: str):
         self.caches.pop(str(name))
+    def checkIfFirstTime(self, name: str):
+        return self.__cacheFirstTimes[str(name)]
+    def firstTimeComplete(self, name: str):
+        self.__cacheFirstTimes[str(name)] = True
+
 
     def __del__(self):
         for cache in self.caches:
