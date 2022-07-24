@@ -103,6 +103,9 @@ class Cache:
     def deleteSpecialEntry(self, name: str, data):
         self.cache_dict["special_entries"].pop(name)
 
+    def getSpecialEntry(self, name: str):
+        return self.cache_dict['special_entries'][name]
+
     def edit_entry(self, name: str, data):
         self.new_entry(name, data)
 
