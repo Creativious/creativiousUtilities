@@ -7,17 +7,27 @@ ignore-vcs = true
 exclude = [
     "sensitive/*",
     ".log",
-    "dist/"
+    "dist/",
+    "/tests",
+    ".gitignore"
 ]
 
 [project]
 name = "creativiousUtilities"
-version = "2.2.0"
+version = "2.2.4"
 authors = [{name="Creativious", email="timothy@creativious.net"}]
 description = "Experimental and likely to break by update\nIf you are to use this have it require the specific version you know works\nGeneral purpose prebuilt functions for any project that I work on"
 readme = "PYPROJECT.md"
-requires-python = ">=3.10"
-dependancies = "requirements.txt"
+requires-python = ">=3.11"
+dependancies = [
+    "setuptools~=60.2.0",
+    "mysql-connector-python~=8.0.29",
+    "PyYAML~=6.0",
+    "colorlog~=6.6.0",
+    "MIDIUtil~=1.2.1",
+    "py-cord~=2.3.2",
+    "pandas~=1.5.3"
+]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent"

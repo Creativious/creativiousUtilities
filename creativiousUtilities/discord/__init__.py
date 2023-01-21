@@ -1,8 +1,10 @@
+from typing import Any
+
 import discord
 import os
 from os import path
 import logging
-import datetime
+from creativiousUtilities.logging import Logger
 from discord.ext import commands
 
 
@@ -48,3 +50,11 @@ class HelpCommand:
 
     def getHelp(self, page: int = 0):
         return self.pages[page]
+
+class BotClient(discord.Client):
+    def __init__(self, **options: Any):
+        super().__init__(**options)
+        self.logger = Logger(name="Bot", logAllFile="logs/all.log").getLogger()
+    async def on_ready(self):
+        self.logger.info(f"Logged in as {self.user}")
+
