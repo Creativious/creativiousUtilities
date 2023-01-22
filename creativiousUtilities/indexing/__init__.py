@@ -10,14 +10,14 @@ class IndexParameter:
 
 
 class Index:
-    def __init__(self, name: str, parameters: list[str], primary_index = False):
+    def __init__(self, name: str, parameters: list[str], primary_index = None):
         self.name = name
         dict_data = {}
         for parameter in parameters:
             dict_data[parameter] = []
         self.df = pd.DataFrame(dict_data)
         del dict_data # Removing from memory
-        if primary_index: # Primary index for information, could be a log ID or a steamid64 or anything depending on the type of index
+        if primary_index is not None: # Primary index for information, could be a log ID or a steamid64 or anything depending on the type of index
             self.df.set_index([str(primary_index)])
 
 
@@ -37,14 +37,14 @@ class IndexSystem:
                     print(index.name)
 
 
-    def get_index(self, name:str, parameters: list[str], primary_index = False):
+    def get_index(self, name:str, parameters: list[str], primary_index = None):
         if name in self.indexes:
             return self.indexes[name]
         else:
             self.__create_index(name, parameters, primary_index)
 
     @decorators.depreciated("Use the get_index function")
-    def create_index(self, name, parameters: list[str], primary_index = False):
+    def create_index(self, name, parameters: list[str], primary_index = None):
         if name in self.indexes:
             return self.indexes[name]
         else:

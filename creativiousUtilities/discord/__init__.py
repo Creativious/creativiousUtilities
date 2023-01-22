@@ -1,3 +1,4 @@
+from abc import ABC
 from typing import Any
 
 import discord
@@ -51,7 +52,7 @@ class HelpCommand:
     def getHelp(self, page: int = 0):
         return self.pages[page]
 
-class BotClient(discord.Client):
+class BotClient(commands.Bot, ABC):
     def __init__(self, **options: Any):
         super().__init__(**options)
         self.logger = Logger(name="Bot", logAllFile="logs/all.log").getLogger()
