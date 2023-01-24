@@ -25,8 +25,10 @@ class SelfPurgingObject(ABC): # You make this the parent, you like extend from i
         self.time_to_be_deleted = self.event_loop.time() + self.purge_time_delay
         self.schedule_deletion_for_purge_time()
 
-    def reset_timer(self):
+    def reset_timer(self, save_on_reset: bool = True):
         if self.reset_time_if_accessed:
+            if save_on_reset:
+                self._save()
             self.time_to_be_deleted = self.event_loop.time() + self.purge_time_delay
             self.schedule_deletion_for_purge_time()
         else:
